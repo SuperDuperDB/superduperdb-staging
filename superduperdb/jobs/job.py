@@ -122,13 +122,6 @@ class FunctionJob(Job):
         d['_path'] = f'superduper/jobs/job/FunctionJob/{path}'
         return d
 
-    def submit_remote(self, dependencies=()):
-        """Submit job for remote execution.
-
-        :param dependencies: list of dependencies
-        """
-        self.future = self.db.compute.submit_remote(self.identifier, dependencies=dependencies)
-        return
 
     def submit(self, dependencies=(), update_job=True):
         """Submit job for execution.
@@ -161,10 +154,7 @@ class FunctionJob(Job):
         self.db = db
         db.metadata.create_job(self.dict())
 
-        if db.compute.remote is True:
-            self.submit_remote(dependencies=dependencies)
-        else:
-            self.submit(dependencies=dependencies)
+        self.submit(dependencies=dependencies)
 
         return self
 
@@ -192,6 +182,7 @@ class ComponentJob(Job):
         compute_kwargs: t.Dict = {},
         identifier: t.Optional[str] = None,
         db: t.Optional['Datalayer'] = None,
+        component: 'Component' =None
     ):
         self.compute_kwargs = compute_kwargs or CFG.cluster.compute.compute_kwargs
 
@@ -200,7 +191,7 @@ class ComponentJob(Job):
         self.component_identifier = component_identifier
         self.method_name = method_name
         self.type_id = type_id
-        self._component = None
+        self._component = component
 
     @property
     def component(self):
@@ -216,18 +207,8 @@ class ComponentJob(Job):
         self._component = value
         self.callable = getattr(self._component, self.method_name)
 
-    def submit_remote(self, dependencies=()):
-        """Submit job for remote execution.
 
-        :param dependencies: list of dependencies
-        """
-        self.future = self.db.compute.submit_remote(
-            self.identifier,
-            dependencies=dependencies,
-        )
-        return
-
-    def submit(self, dependencies=(), update_job=True):
+    def submit(self, dependencies=()):
         """Submit job for execution.
 
         :param dependencies: list of dependencies
@@ -260,14 +241,9 @@ class ComponentJob(Job):
         self.db = db
 
         db.metadata.create_job(self.dict())
-        if self.component is None:
-            self.component = db.load(self.type_id, self.component_identifier)
 
-        if db.compute.remote is True:
-            self.submit_remote(dependencies=dependencies)
-        else:
-            self.submit(dependencies=dependencies)
-        return self
+        self.submit(dependencies=dependencies)
+        return
 
     def dict(self):
         """Return a dictionary representation of the job."""

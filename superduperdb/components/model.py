@@ -587,6 +587,7 @@ class Model(Component, metaclass=ModelMeta):
                 'in_memory': in_memory,
                 'overwrite': overwrite,
                 'X': X,
+                **self.predict_kwargs
             },
             compute_kwargs=self.compute_kwargs,
         )
