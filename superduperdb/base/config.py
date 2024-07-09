@@ -198,6 +198,10 @@ class Cluster(BaseConfig):
                 then no cdc assumed)
                 None: Run cdc on local as a thread.
                 - `f"{http://{host}:{port}"`: Connect a remote cdc service
+    :param scheduler: The URI for the Scheduler service
+                          - `f"http://{host}:{port}"`:
+                            Connect a remote service which schedules jobs to
+                            a distributed compute backend.
     """
 
     compute: Compute = dc.field(default_factory=Compute)

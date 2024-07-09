@@ -29,6 +29,9 @@ def method_job(
     :param job_id: unique identifier for this job
     :param dependencies: other jobs that this job depends on
     :param db: datalayer to use
+    :param component: (Optional) Loaded component, when passed 
+                      the function skips loading `identifier`
+                      from database.
     """
     import sys
 

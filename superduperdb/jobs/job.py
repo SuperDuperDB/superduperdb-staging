@@ -101,6 +101,7 @@ class FunctionJob(Job):
     :param callable: function to be called
     :param args: positional arguments to be passed to the function
     :param kwargs: keyword arguments to be passed to the function
+    :param identifier: (Optional) Identifier for the jobs
     :param db: A datalayer instance.
     """
 
@@ -179,6 +180,7 @@ class ComponentJob(Job):
     :param args: positional arguments to be passed to the method
     :param kwargs: keyword arguments to be passed to the method
     :param compute_kwargs: Arguments to use for model predict computation
+    :param identifier: (Optional) Identifier for the jobs
     :param db: A Datalayer instance.
     """
 
