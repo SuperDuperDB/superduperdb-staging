@@ -177,8 +177,7 @@ class Listener(Component):
         ids = [id[self.select.primary_id] for id in ids]
         events = [{'identifier': id, 'type': Event.insert} for id in ids]
         to =   {'type_id': 'listener', 'identifier': self.identifier}
-        db.compute.broadcast(events, to=to)
-        return []
+        return db.compute.broadcast(events, to=to)
         
 
     def run_jobs(
